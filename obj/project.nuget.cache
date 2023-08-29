@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "IhPNKOO7Qmq2t/KYLrcYpX1vGCkir34UyO6nB0rNRIlayWL/WZXYAvH4l7twgnG02pcdCk+vassmSjSoAGYosg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\manu_\\Documents\\Projets\\SWG Rumination\\SWG Rumination.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\manu_\\.nuget\\packages\\ssh.net\\2020.0.2\\ssh.net.2020.0.2.nupkg.sha512",
+    "C:\\Users\\manu_\\.nuget\\packages\\sshnet.security.cryptography\\1.3.0\\sshnet.security.cryptography.1.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

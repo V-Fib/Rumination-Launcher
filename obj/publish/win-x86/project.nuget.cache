@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "kJr3yPoVCA5aHAVHOxDDMi9UiqHKNjqbupt3mWw18LwobhLD9ROHJ7Wsx6GZZi3vNh6iPEhbuVGfUXVxyPXujA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\manu_\\Documents\\Projets\\SWG Rumination\\SWG Rumination.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\manu_\\.nuget\\packages\\ssh.net\\2020.0.2\\ssh.net.2020.0.2.nupkg.sha512",
+    "C:\\Users\\manu_\\.nuget\\packages\\sshnet.security.cryptography\\1.3.0\\sshnet.security.cryptography.1.3.0.nupkg.sha512",
+    "C:\\Users\\manu_\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\6.0.20\\microsoft.netcore.app.runtime.win-x86.6.0.20.nupkg.sha512",
+    "C:\\Users\\manu_\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\6.0.20\\microsoft.windowsdesktop.app.runtime.win-x86.6.0.20.nupkg.sha512",
+    "C:\\Users\\manu_\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\6.0.20\\microsoft.aspnetcore.app.runtime.win-x86.6.0.20.nupkg.sha512"
+  ],
+  "logs": []
+}

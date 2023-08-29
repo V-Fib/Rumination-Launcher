@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>SWG_Rumination</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Background.jpg" />
+    <None Remove="Button_AddGame.png" />
+    <None Remove="Button_Calculator.png" />
+    <None Remove="Button_Discord.png" />
+    <None Remove="Button_Play.png" />
+    <None Remove="Button_Update.png" />
+    <None Remove="Button_Waiting.png" />
+    <None Remove="Button_Website.png" />
+    <None Remove="Icon.png" />
+    <None Remove="icon_close.png" />
+    <None Remove="icon_fullscreen.png" />
+    <None Remove="icon_minimize.png" />
+    <None Remove="icon_settings.png" />
+    <None Remove="Logo_Nexus.png" />
+    <None Remove="Resources\Background.jpg" />
+    <None Remove="Resources\icon_close.png" />
+    <None Remove="Resources\icon_fullscreen.png" />
+    <None Remove="Resources\icon_minimize.png" />
+    <None Remove="Resources\icon_settings.png" />
+    <None Remove="Resources\Logo_Nexus.png" />
+    <None Remove="SWGRumination.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icon.png" />
+    <Resource Include="Resources\Button_Waiting.png" />
+    <Resource Include="Resources\Button_Update.png" />
+    <Resource Include="Resources\Button_AddGame.png" />
+    <Resource Include="Resources\Button_Calculator.png" />
+    <Resource Include="Resources\Button_Discord.png" />
+    <Resource Include="Resources\Button_Play.png" />
+    <Resource Include="Resources\Button_Website.png" />
+    <Resource Include="Resources\Background.jpg" />
+    <Resource Include="Resources\icon_close.png" />
+    <Resource Include="Resources\icon_fullscreen.png" />
+    <Resource Include="Resources\icon_minimize.png" />
+    <Resource Include="Resources\icon_settings.png" />
+    <Resource Include="Resources\Logo_Nexus.png" />
+    <Resource Include="Resources\SWGRumination.png" />
+  </ItemGroup>
+
+</Project>

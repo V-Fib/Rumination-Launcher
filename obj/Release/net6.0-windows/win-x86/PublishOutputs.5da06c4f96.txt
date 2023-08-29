@@ -1,0 +1,7 @@
+C:\Users\manu_\Downloads\Publish\SWG Rumination.pdb
+C:\Users\manu_\Downloads\Publish\D3DCompiler_47_cor3.dll
+C:\Users\manu_\Downloads\Publish\PenImc_cor3.dll
+C:\Users\manu_\Downloads\Publish\PresentationNative_cor3.dll
+C:\Users\manu_\Downloads\Publish\vcruntime140_cor3.dll
+C:\Users\manu_\Downloads\Publish\wpfgfx_cor3.dll
+C:\Users\manu_\Downloads\Publish\SWG Rumination.exe

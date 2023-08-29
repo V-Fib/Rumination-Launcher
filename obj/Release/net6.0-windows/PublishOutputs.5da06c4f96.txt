@@ -1,0 +1,7 @@
+C:\Users\manu_\Downloads\Publish\SWG Rumination.exe
+C:\Users\manu_\Downloads\Publish\SWG Rumination.dll
+C:\Users\manu_\Downloads\Publish\SWG Rumination.deps.json
+C:\Users\manu_\Downloads\Publish\SWG Rumination.runtimeconfig.json
+C:\Users\manu_\Downloads\Publish\SWG Rumination.pdb
+C:\Users\manu_\Downloads\Publish\Renci.SshNet.dll
+C:\Users\manu_\Downloads\Publish\SshNet.Security.Cryptography.dll

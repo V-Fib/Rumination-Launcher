@@ -1,0 +1,24 @@
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SWG Rumination.exe
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SWG Rumination.deps.json
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SWG Rumination.runtimeconfig.json
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SWG Rumination.dll
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SWG Rumination.pdb
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\Renci.SshNet.dll
+C:\Users\manu_\Documents\Projets\SWG Rumination\bin\Release\net6.0-windows\SshNet.Security.Cryptography.dll
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.csproj.AssemblyReference.cache
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\MainWindow.g.cs
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\App.g.cs
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination_MarkupCompile.cache
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination_MarkupCompile.lref
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\MainWindow.baml
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.g.resources
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.AssemblyInfoInputs.cache
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.AssemblyInfo.cs
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.csproj.CoreCompileInputs.cache
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.csproj.CopyComplete
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.dll
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\refint\SWG Rumination.dll
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.pdb
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\SWG Rumination.genruntimeconfig.cache
+C:\Users\manu_\Documents\Projets\SWG Rumination\obj\Release\net6.0-windows\ref\SWG Rumination.dll

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWG Rumination", "SWG Rumination.csproj", "{986BF77F-8B8D-4F83-B01E-969836D30EDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{986BF77F-8B8D-4F83-B01E-969836D30EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{986BF77F-8B8D-4F83-B01E-969836D30EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{986BF77F-8B8D-4F83-B01E-969836D30EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{986BF77F-8B8D-4F83-B01E-969836D30EDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0083B65C-F483-45BB-8CF1-C69B20D5187E}
+	EndGlobalSection
+EndGlobal
