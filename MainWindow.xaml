@@ -1,387 +1,212 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Renci.SshNet;
-using Renci.SshNet.Sftp;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using WinForms = System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+<Window x:Class="SWG_Rumination.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SWG_Rumination"
+        Title="SWG Rumination" Icon="/Resources/Icon.png"
+        Height="675" Width="1200" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryColor" Color="#FFDD9000"></SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#FF981414"></SolidColorBrush>
+    </Window.Resources>
+    <Canvas>
 
-namespace SWG_Rumination
-{
+        <!-- Bouton fermer -->
+        <Button Canvas.Left="1150" Canvas.Top="5" Panel.ZIndex="10" Click="Button_Close" Padding="5,5,5,5" BorderThickness="0,0,0,0" Height="30" Width="40
+                ">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#99505050"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Border.CornerRadius" Value="0,4,4,0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="{TemplateBinding Border.CornerRadius}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#C0392B"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Content>
+                <Image Source="/Resources/icon_close.png" Height="13" Width="13
+                " Cursor=""/>
+            </Button.Content>
+        </Button>
+        <!-- Bouton fullscreen -->
+        <Button Canvas.Left="1110" Canvas.Top="5" Panel.ZIndex="10" Click="Button_Maximized" Padding="5,5,5,5" BorderThickness="0,0,0,0" Height="30" Width="40
+                " Cursor="Hand">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#99505050"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Border.CornerRadius" Value="0,0,0,0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="{TemplateBinding Border.CornerRadius}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#505050"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Content>
+                <Image Source="/Resources/icon_fullscreen.png" Height="13" Width="13
+                "/>
+            </Button.Content>
+        </Button>
+        <!-- Bouton minimize -->
+        <Button Canvas.Left="1070" Canvas.Top="5" Panel.ZIndex="10" Click="Button_Minimize" Padding="5,5,5,5" BorderThickness="0,0,0,0" Height="30" Width="40
+                " Cursor="Hand">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#99505050"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Border.CornerRadius" Value="4,0,0,4"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="{TemplateBinding Border.CornerRadius}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#505050"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Content>
+                <Image Source="/Resources/icon_minimize.png" Height="13" Width="13
+                "/>
+            </Button.Content>
+        </Button>
 
-    enum LauncherStatus
-    {
-        start,
-        install,
-        update,
-        waiting
-    }
+        <!-- Logo -->
+        <Image Width="150" Height="41" Canvas.Left="30" Canvas.Top="0" Source="/Resources/Logo_Nexus.png" Panel.ZIndex="10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
+        <!-- Drag -->
+        <Rectangle Height="43" Width="1200" MouseDown="DragWindow" Canvas.Left="0" Canvas.Top="0" Panel.ZIndex="9">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#BE000000" Offset="0.008"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
 
-        private string pathFolder;
-        private string filePath = "pathFolder.txt";
-        private string versionFile;
-        private string versionServer;
-        private string treServer;
-        private string swgemuServer;
+        <!-- Background -->
+        <Image Height="675" Width="1200" Source="/Resources/Background.jpg" Canvas.Left="0" Canvas.Top="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Image  Width="650" Height="159" Source="/Resources/SWGRumination.png" Canvas.Left="30" Canvas.Bottom="0" Canvas.Top="516" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-        private LauncherStatus _status;
+        <!-- Jouer -->
+        <Button Click="Play" Name="PlayButton" Height="91" Width="326" Canvas.Right="20" Canvas.Bottom="40" Padding="0,0,0,0" Foreground="White" FontSize="18" BorderThickness="0,0,0,0" Cursor="" Canvas.Left="854" Canvas.Top="544">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#00F0F8FF"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Border.CornerRadius" Value="4,4,4,4"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="{TemplateBinding Border.CornerRadius}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#505050"/>
+                        </Trigger>
+                        <!--<Trigger Property="IsMouseOver" Value="True">-->
+                        <!--<Setter Property="Background" Value="{DynamicResource SecondaryColor}"/>-->
+                        <!--</Trigger>-->
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Content>
+                <Image Name="ButtonImage" Source="/Resources/Button_AddGame.png"/>
+                <!--<StackPanel Orientation="Horizontal">-->
+                <!--<Image Name="PlayImage" Source="/Resources/Button_Play.png" Height="20" Width="20
+                    " Margin="0,2,5,0" Visibility="Visible"/>-->
+                <!--<Label Name="PlayText" Foreground="White" FontWeight="Normal">Add Game</Label>-->
+                <!--</StackPanel>-->
+            </Button.Content>
+        </Button>
 
-        internal LauncherStatus Status
-        {
-            get => _status;
-            set
-            {
-                _status = value;
-                switch (_status)
-                {
-                    case LauncherStatus.start:
-                        //PlayButton.Content = "Choose a folder";
-                        BitmapImage StartBitmap = new BitmapImage();
-                        StartBitmap.BeginInit();
-                        StartBitmap.UriSource = new Uri("Resources/Button_AddGame.png", UriKind.Relative);
-                        StartBitmap.EndInit();
-                        ButtonImage.Source = StartBitmap;
-                        break;
-                    case LauncherStatus.install:
-                        //PlayButton.Content = "Starting the game";
-                        BitmapImage InstallBitmap = new BitmapImage();
-                        InstallBitmap.BeginInit();
-                        InstallBitmap.UriSource = new Uri("Resources/Button_Play.png", UriKind.Relative);
-                        InstallBitmap.EndInit();
-                        ButtonImage.Source = InstallBitmap;
-                        break;
-                    case LauncherStatus.update:
-                        //PlayButton.Content = "Update";
-                        BitmapImage UpdateBitmap = new BitmapImage();
-                        UpdateBitmap.BeginInit();
-                        UpdateBitmap.UriSource = new Uri("Resources/Button_Update.png", UriKind.Relative);
-                        UpdateBitmap.EndInit();
-                        ButtonImage.Source = UpdateBitmap;
-                        break;
-                    case LauncherStatus.waiting:
-                        //PlayButton.Content = "Waiting";
-                        BitmapImage WaitingBitmap = new BitmapImage();
-                        WaitingBitmap.BeginInit();
-                        WaitingBitmap.UriSource = new Uri("Resources/Button_Waiting.png", UriKind.Relative);
-                        WaitingBitmap.EndInit();
-                        ButtonImage.Source = WaitingBitmap;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        <!-- Settings -->
+        <Button Click="Open_Settings" ClickMode="Press" Background="#00F0FFFF" Name="SettingsButton" Height="50" Width="55" Canvas.Left="0" Canvas.Bottom="0" Padding="10,10,10,10" BorderThickness="0,0,0,0">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#1ABC9C"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Border.CornerRadius" Value="0,4,4,0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="{TemplateBinding Border.CornerRadius}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#505050"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#148E76"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/icon_settings.png" Height="20" Width="20
+                    " Margin="0,2,5,0"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <StackPanel Name="MenuSettings" Height="117" Width="186" Canvas.Bottom="0" Canvas.Left="-6" Panel.ZIndex="10" Canvas.Top="428">
+            <Label Content="Game path" Foreground="White" Width="84"/>
+            <TextBlock PreviewMouseDown="ChangePath"  Text="..." x:Name="PathName" Height="20" Foreground="Black" Background="Beige" Width="130"/>
+            <Button Click="LaunchScan" Width="120" Margin="0,20,0,0" Background="{DynamicResource PrimaryColor}">
+                <StackPanel Orientation="Horizontal">
+                    <Label Foreground="White" FontWeight="Normal" x:Name="ScanText" Content="Check files"/>
+                </StackPanel>
+            </Button>
 
-        public MainWindow()
-        {
-            InitializeComponent();
+        </StackPanel>
+        <Rectangle Name="BackgroundSettings" Height="129" Width="156" Canvas.Bottom="0" Canvas.Left="9" Panel.ZIndex="9" HorizontalAlignment="Center" Canvas.Top="416" VerticalAlignment="Top" RadiusX="48" RadiusY="48">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#E5000000"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
 
-            // Menu visibility
-            MenuSettings.Dispatcher.Invoke(() =>
-            {
-                BackgroundSettings.Visibility = Visibility.Hidden;
-                MenuSettings.Visibility = Visibility.Hidden;
-            });
+        <!-- Version -->
+        <Label Content="Version 1.0.0" Canvas.Left="1130" Canvas.Bottom="10" Foreground="#CCCCCC" FontSize="8"/>
 
-            // Checks if the game path exists
-            if (File.Exists(filePath))
-            {
-                SettingsButton.Visibility = Visibility.Visible;
-                Status = LauncherStatus.install;
-                // Read the file
-                string fileContents;
-                using (StreamReader sr = File.OpenText(filePath))
-                {
-                    fileContents = sr.ReadToEnd();
-                }
-                pathFolder = fileContents;
-                PathName.Text = pathFolder;
-            }
-            else
-            {
-                SettingsButton.Visibility = Visibility.Hidden;
-                Status = LauncherStatus.start;
-                pathFolder = String.Empty;
-                PathName.Text = "...";
-            }
-
-            versionFile = System.IO.Path.Combine(pathFolder, "Version.txt");
-            versionServer = "/home/rumination/Version.txt"; // Version build location on the server
-            treServer = "/home/rumination/Live Patches/Rumination.tre"; // First update file
-            swgemuServer = "/home/rumination/Live Patches/swgemu_live.cfg"; // Second update file
-            swgemuServerip = "/home/rumination/Live Patches/swgemu_login.cfg"; // Third update file
-            swgemuServerConfig = "/home/rumination/Live Patches/swgemu.cfg"; // Fourth update file
-            swgemuServerPreConfig = "/home/rumination/Live Patches/swgemu_preload.cfg"; // Fifth update file
-            swgemuServerUserConfig = "/home/rumination/Live Patches/user.cfg"; // Sixth update file
-            swgemuServerOptionsConfig = "/home/rumination/Live Patches/options.cfg"; // Seventh update file
-
-            CheckForUpdate();
-        }
-
-        // Window drag
-        private void DragWindow(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
-        }
-
-        // Close the window
-        private void Button_Close(object sender, RoutedEventArgs e) => this.Close();
-
-        // Enlarge window
-        private void Button_Maximized(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Maximized;
-        }
-
-        // Minimize window
-        private void Button_Minimize(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        // Choose the path of the game
-        private async void Play(object sender, RoutedEventArgs e)
-        {
-            if (File.Exists(filePath))
-            {
-                if(Status == LauncherStatus.update)
-                {
-                    DownloadConfigFiles();
-                } else
-                {
-                    System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "SWGEmu.exe",
-                        WorkingDirectory = pathFolder,
-                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal,
-                        UseShellExecute = true,
-                    };
-
-                    System.Diagnostics.Process.Start(psi);
-                }
-            } else
-            {
-                WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
-                WinForms.DialogResult result = dialog.ShowDialog();
-
-                Status = LauncherStatus.waiting;
-                await Task.Delay(1000);
-
-                // When a folder has been selected
-                if (result == WinForms.DialogResult.OK)
-                {
-                    DownloadConfigFiles();
-                    pathFolder = dialog.SelectedPath;
-                    Status = LauncherStatus.install;
-
-                    // Backup to file
-                    using (StreamWriter sw = File.CreateText(filePath))
-                    {
-                        sw.Write(pathFolder);
-                    }
-
-                    SettingsButton.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    pathFolder = String.Empty;
-                    Status = LauncherStatus.start;
-                }
-                PathName.Text = pathFolder;
-
-                // Create the version file from the server
-                using (SftpClient sftp = new SftpClient("15.204.248.142", "rumination", "Jb09041964@@"))
-                {
-                    sftp.Connect();
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "Version.txt")))
-                    {
-                        sftp.DownloadFile(versionServer, fileStream);
-                    }
-                    sftp.Disconnect();
-                }
-            }
-            
-        }
-
-        // Settings menu
-        private void Open_Settings(object sender, RoutedEventArgs e)
-        {
-
-            // Menu visibility
-            MenuSettings.Dispatcher.Invoke(() =>
-            {
-                BackgroundSettings.Visibility = Visibility.Visible;
-                MenuSettings.Visibility = Visibility.Visible;
-            });
-        }
-
-        // Start Scan
-        private async void LaunchScan(object sender, RoutedEventArgs e)
-        {
-            int number1 = new Random().Next(5, 25);
-            int number2 = new Random().Next(26, 45);
-            int number3 = new Random().Next(46, 70);
-            int number4 = new Random().Next(71, 95);
-            ScanText.Content = "In progress (0%)";
-            await Task.Delay(5000);
-            ScanText.Content = "In progress ("+ number1 + "%)";
-            await Task.Delay(2100);
-            DownloadConfigFiles();
-            ScanText.Content = "In progress ("+ number2 + "%)";
-            await Task.Delay(3200);
-            ScanText.Content = "In progress ("+ number3 + "%)";
-            await Task.Delay(4100);
-            ScanText.Content = "In progress ("+ number4 + "%)";
-            await Task.Delay(2500);
-            ScanText.Content = "Finish";
-        }
-
-        // Change the path
-        private void ChangePath(object sender, RoutedEventArgs e)
-        {
-            WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
-            WinForms.DialogResult result = dialog.ShowDialog();
-
-            // When a folder has been selected
-            if (result == WinForms.DialogResult.OK)
-            {
-                pathFolder = dialog.SelectedPath;
-                PlayButton.Content = "Starting the game";
-                Status = LauncherStatus.install;
-
-                // Backup to file
-                using (StreamWriter sw = File.CreateText(filePath))
-                {
-                    sw.Write(pathFolder);
-                }
-            }
-            else
-            {
-                pathFolder = String.Empty;
-                Status = LauncherStatus.start;
-            }
-            PathName.Text = pathFolder;
-        }
-
-        // Checking for updates
-        private void CheckForUpdate()
-        {
-            if (File.Exists(versionFile))
-            {
-                Version localVersion = new Version(File.ReadAllText(versionFile));
-                try
-                {
-                    using (SftpClient sftp = new SftpClient("15.204.248.142", "rumination", "Jb09041964@@"))
-                    {
-                        try
-                        {
-                            sftp.Connect();
-                        
-                            Version serverVersion = new Version(sftp.ReadAllText(versionServer));
-
-                            if(serverVersion == localVersion)
-                            {
-                                // These are the same versions
-                                Status = LauncherStatus.install;
-                            } else
-                            {
-                                // The versions are different
-                                Status = LauncherStatus.update;
-                            }
-
-                            sftp.Disconnect();
-                        }
-                        catch (Exception ex)
-                        {
-                            // Error
-                            MessageBox.Show("Configuration SFTP error : " + ex.Message);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-
-        }
-
-        // Downloading config and shift files
-        private async void DownloadConfigFiles()
-        {
-            Status = LauncherStatus.waiting;
-
-            await Task.Delay(1000);
-
-            // Recover files
-            using (SftpClient sftp = new SftpClient("15.204.248.142", "rumination", "Jb09041964@@"))
-            {
-                sftp.Connect();
-
-                try
-                {
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "Rumination.tre")))
-                    {
-                        sftp.DownloadFile(treServer, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_live.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServer, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_login.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServerip, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServerConfig, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_preload.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServerPreConfig, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "user.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServerUserConfig, fileStream);
-                    }
-                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "options.cfg")))
-                    {
-                        sftp.DownloadFile(swgemuServerOptionsConfig, fileStream);
-                    }
-                }
-                catch (System.IO.IOException)
-                {
-                    //Error writing the file... do something here (example)
-                    MessageBox.Show("Unable to write the game files to disk. Try closing all instances of your games and run this launcher again");
-                }
-
-                sftp.Disconnect();
-            }
-
-            await Task.Delay(1000);
-
-            Status = LauncherStatus.install;
-        }
+    </Canvas>
+</Window>
