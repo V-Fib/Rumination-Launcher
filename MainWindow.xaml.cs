@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,8 +43,14 @@ namespace SWG_Rumination
         private string versionServer;
         private string treServer;
         private string swgemuServer;
+        private string swgemuServerip;
+        private string swgemuServerConfig;
+        private string swgemuServerPreConfig;
+        private string swgemuServerUserConfig;
+        private string swgemuServerOptionsConfig;
 
         private LauncherStatus _status;
+        private bool isScanFinish;
 
         internal LauncherStatus Status
         {
@@ -96,19 +102,19 @@ namespace SWG_Rumination
         {
             InitializeComponent();
 
-            // Visibilité du menu
+            // Menu visibility
             MenuSettings.Dispatcher.Invoke(() =>
             {
                 BackgroundSettings.Visibility = Visibility.Hidden;
                 MenuSettings.Visibility = Visibility.Hidden;
             });
 
-            // Vérifie si le fichier de sauvegarde du chemin du jeu existe
+            // Checks if the game path exists
             if (File.Exists(filePath))
             {
                 SettingsButton.Visibility = Visibility.Visible;
                 Status = LauncherStatus.install;
-                // Lecture du fichier
+                // Read the file
                 string fileContents;
                 using (StreamReader sr = File.OpenText(filePath))
                 {
@@ -126,36 +132,41 @@ namespace SWG_Rumination
             }
 
             versionFile = System.IO.Path.Combine(pathFolder, "Version.txt");
-            versionServer = "/home/rumination/Version.txt"; // Emplacement du build de version sur le serveur
-            treServer = "/home/rumination/Live Patches/Rumination.tre"; // Premier fichier de mise à jour
-            swgemuServer = "/home/rumination/Live Patches/swgemu_live.cfg"; // Second fichier de mise à jour
+            versionServer = "/home/rumination/Version.txt"; // Version build location on the server
+            treServer = "/home/rumination/Live Patches/Rumination.tre"; // First update file
+            swgemuServer = "/home/rumination/Live Patches/swgemu_live.cfg"; // Second update file
+            swgemuServerip = "/home/rumination/Live Patches/swgemu_login.cfg"; // Third update file
+            swgemuServerConfig = "/home/rumination/Live Patches/swgemu.cfg"; // Fourth update file
+            swgemuServerPreConfig = "/home/rumination/Live Patches/swgemu_preload.cfg"; // Fifth update file
+            swgemuServerUserConfig = "/home/rumination/Live Patches/user.cfg"; // Sixth update file
+            swgemuServerOptionsConfig = "/home/rumination/Live Patches/options.cfg"; // Seventh update file
 
             CheckForUpdate();
         }
 
-        // Drag de la fenêtre
+        // Window drag
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
 
-        // Fermer la fenêtre
+        // Close the window
         private void Button_Close(object sender, RoutedEventArgs e) => this.Close();
 
-        // Agrandir la fenêtre
+        // Enlarge window
         private void Button_Maximized(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Maximized;
         }
 
-        // Réduire fenêtre
+        // Minimize window
         private void Button_Minimize(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
-        // Choisir le chemin du jeu
+        // Choose the path of the game
         private async void Play(object sender, RoutedEventArgs e)
         {
             if (File.Exists(filePath))
@@ -165,25 +176,33 @@ namespace SWG_Rumination
                     DownloadConfigFiles();
                 } else
                 {
-                    System.Diagnostics.Process.Start(pathFolder + "/SWGEmu.exe");
+                    System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "SWGEmu.exe",
+                        WorkingDirectory = pathFolder,
+                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal,
+                        UseShellExecute = true,
+                    };
+
+                    System.Diagnostics.Process.Start(psi);
                 }
             } else
             {
                 WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // Par défaut, ouvre le dossier "Mes documents"
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
                 WinForms.DialogResult result = dialog.ShowDialog();
 
                 Status = LauncherStatus.waiting;
                 await Task.Delay(1000);
 
-                // Lorsque un dossier à été sélectionné
+                // When a folder has been selected
                 if (result == WinForms.DialogResult.OK)
                 {
                     DownloadConfigFiles();
                     pathFolder = dialog.SelectedPath;
                     Status = LauncherStatus.install;
 
-                    // Sauvegarde sur le fichier
+                    // Backup to file
                     using (StreamWriter sw = File.CreateText(filePath))
                     {
                         sw.Write(pathFolder);
@@ -198,7 +217,7 @@ namespace SWG_Rumination
                 }
                 PathName.Text = pathFolder;
 
-                // Créer le fichier de version depuis le serveur
+                // Create the version file from the server
                 using (SftpClient sftp = new SftpClient("15.204.248.142", "rumination", "Jb09041964@@"))
                 {
                     sftp.Connect();
@@ -212,11 +231,11 @@ namespace SWG_Rumination
             
         }
 
-        // Menu paramètres
+        // Settings menu
         private void Open_Settings(object sender, RoutedEventArgs e)
         {
 
-            // Visibilité du menu
+            // Menu visibility
             MenuSettings.Dispatcher.Invoke(() =>
             {
                 BackgroundSettings.Visibility = Visibility.Visible;
@@ -224,42 +243,58 @@ namespace SWG_Rumination
             });
         }
 
-        // Lancer le scan
+        // Start Scan
         private async void LaunchScan(object sender, RoutedEventArgs e)
         {
-            int number1 = new Random().Next(5, 25);
-            int number2 = new Random().Next(26, 45);
-            int number3 = new Random().Next(46, 70);
-            int number4 = new Random().Next(71, 95);
-            ScanText.Content = "In progress (0%)";
-            await Task.Delay(5000);
-            ScanText.Content = "In progress ("+ number1 + "%)";
-            await Task.Delay(2100);
-            DownloadConfigFiles();
-            ScanText.Content = "In progress ("+ number2 + "%)";
-            await Task.Delay(3200);
-            ScanText.Content = "In progress ("+ number3 + "%)";
-            await Task.Delay(4100);
-            ScanText.Content = "In progress ("+ number4 + "%)";
-            await Task.Delay(2500);
-            ScanText.Content = "Finish";
+            if (!isScanFinish)
+            {
+                int number1 = new Random().Next(5, 25);
+                int number2 = new Random().Next(26, 45);
+                int number3 = new Random().Next(46, 70);
+                int number4 = new Random().Next(71, 95);
+                ScanText.Content = "In progress (0%)";
+                await Task.Delay(5000);
+                ScanText.Content = "In progress (" + number1 + "%)";
+                await Task.Delay(2100);
+                DownloadConfigFiles();
+                ScanText.Content = "In progress (" + number2 + "%)";
+                await Task.Delay(3200);
+                ScanText.Content = "In progress (" + number3 + "%)";
+                await Task.Delay(4100);
+                ScanText.Content = "In progress (" + number4 + "%)";
+                await Task.Delay(2500);
+                ScanText.Content = "Finish";
+                isScanFinish = true;
+            }
+            else
+            {
+                // Menu to go invisible after completed scan
+                MenuSettings.Dispatcher.Invoke(() =>
+                {
+                    BackgroundSettings.Visibility = Visibility.Hidden;
+                    MenuSettings.Visibility = Visibility.Hidden;
+                });
+                isScanFinish = false;
+            }
+
         }
 
-        // Changer le chemin
+
+        // Change the path
         private void ChangePath(object sender, RoutedEventArgs e)
         {
             WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // Par défaut, ouvre le dossier "Mes documents"
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
             WinForms.DialogResult result = dialog.ShowDialog();
 
-            // Lorsque un dossier à été sélectionné
+            // When a folder has been selected
             if (result == WinForms.DialogResult.OK)
             {
                 pathFolder = dialog.SelectedPath;
                 PlayButton.Content = "Starting the game";
                 Status = LauncherStatus.install;
 
-                // Sauvegarde sur le fichier
+                // Backup to file
                 using (StreamWriter sw = File.CreateText(filePath))
                 {
                     sw.Write(pathFolder);
@@ -273,7 +308,7 @@ namespace SWG_Rumination
             PathName.Text = pathFolder;
         }
 
-        // Vérification des mises à jour
+        // Checking for updates
         private void CheckForUpdate()
         {
             if (File.Exists(versionFile))
@@ -291,11 +326,11 @@ namespace SWG_Rumination
 
                             if(serverVersion == localVersion)
                             {
-                                // Ce sont les mêmes versions
+                                // These are the same versions
                                 Status = LauncherStatus.install;
                             } else
                             {
-                                // Les versions sont différentes
+                                // The versions are different
                                 Status = LauncherStatus.update;
                             }
 
@@ -316,25 +351,55 @@ namespace SWG_Rumination
 
         }
 
-        // Téléchargement des fichiers de config et maj
+        // Downloading config and shift files
         private async void DownloadConfigFiles()
         {
             Status = LauncherStatus.waiting;
 
             await Task.Delay(1000);
 
-            // Récupérer les fichiers
+            // Recover files
             using (SftpClient sftp = new SftpClient("15.204.248.142", "rumination", "Jb09041964@@"))
             {
                 sftp.Connect();
-                using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "Rumination.tre")))
+
+                try
                 {
-                    sftp.DownloadFile(treServer, fileStream);
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "Rumination.tre")))
+                    {
+                        sftp.DownloadFile(treServer, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_live.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServer, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_login.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerip, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_preload.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerPreConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "user.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerUserConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "options.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerOptionsConfig, fileStream);
+                    }
                 }
-                using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_live.cfg")))
+                catch (System.IO.IOException)
                 {
-                    sftp.DownloadFile(swgemuServer, fileStream);
+                    //Error writing the file... do something here (example)
+                    MessageBox.Show("Unable to write the game files to disk. Try closing all instances of your games and run this launcher again");
                 }
+
                 sftp.Disconnect();
             }
 
