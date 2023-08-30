@@ -372,7 +372,7 @@ namespace SWG_Rumination
                         sftp.DownloadFile(swgemuServerOptionsConfig, fileStream);
                     }
                 }
-                catch (System.IO.IOException ex)
+                catch (System.IO.IOException)
                 {
                     //Error writing the file... do something here (example)
                     MessageBox.Show("Unable to write the game files to disk. Try closing all instances of your games and run this launcher again");
