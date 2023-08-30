@@ -178,7 +178,7 @@ namespace SWG_Rumination
             } else
             {
                 WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // Par défaut, ouvre le dossier "Mes documents"
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
                 WinForms.DialogResult result = dialog.ShowDialog();
 
                 Status = LauncherStatus.waiting;
