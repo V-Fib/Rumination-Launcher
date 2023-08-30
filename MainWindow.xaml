@@ -129,6 +129,11 @@ namespace SWG_Rumination
             versionServer = "/home/rumination/Version.txt"; // Version build location on the server
             treServer = "/home/rumination/Live Patches/Rumination.tre"; // First update file
             swgemuServer = "/home/rumination/Live Patches/swgemu_live.cfg"; // Second update file
+            swgemuServerip = "/home/rumination/Live Patches/swgemu_login.cfg"; // Third update file
+            swgemuServerConfig = "/home/rumination/Live Patches/swgemu.cfg"; // Fourth update file
+            swgemuServerPreConfig = "/home/rumination/Live Patches/swgemu_preload.cfg"; // Fifth update file
+            swgemuServerUserConfig = "/home/rumination/Live Patches/user.cfg"; // Sixth update file
+            swgemuServerOptionsConfig = "/home/rumination/Live Patches/options.cfg"; // Seventh update file
 
             CheckForUpdate();
         }
@@ -257,7 +262,7 @@ namespace SWG_Rumination
         private void ChangePath(object sender, RoutedEventArgs e)
         {
             WinForms.FolderBrowserDialog dialog = new WinForms.FolderBrowserDialog();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // Par défaut, ouvre le dossier "Mes documents"
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // By default, opens the "My Documents" folder
             WinForms.DialogResult result = dialog.ShowDialog();
 
             // When a folder has been selected
@@ -345,6 +350,26 @@ namespace SWG_Rumination
                     using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_live.cfg")))
                     {
                         sftp.DownloadFile(swgemuServer, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_login.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerip, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "swgemu_preload.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerPreConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "user.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerUserConfig, fileStream);
+                    }
+                    using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(pathFolder, "options.cfg")))
+                    {
+                        sftp.DownloadFile(swgemuServerOptionsConfig, fileStream);
                     }
                 }
                 catch (System.IO.IOException ex)
